@@ -1,86 +1,201 @@
-import { rps, rpsls } from './rpsls.js';
+// If you would like to see some examples of similar code to make an interface interact with an API, 
+// check out the coin-server example from a previous COMP 426 semester.
+// https://github.com/jdmar3/coinserver
 
-// Add an event listener for the DOMContentLoaded event
-document.addEventListener('DOMContentLoaded', () => {
-  // Add event listeners for the game-type and opponent-type select elements
-  document.getElementById('game-type').addEventListener('change', updateMoveOptions);
-  document.getElementById('opponent-type').addEventListener('change', showMoveSelection);
+const rps_rules_text = `Rules for Rock Paper Scissors:
 
-  // Add event listener for the play button
-  document.getElementById('play-button').addEventListener('click', playGame);
-});
+  - Scissors CUTS Paper
+  - Paper COVERS Rock
+  - Rock CRUSHES Scissors`
 
-function showMoveSelection() {
-    const gameType = document.getElementById('game-type').value;
-    const opponentType = document.getElementById('opponent-type').value;
-    const playButton = document.getElementById('play-button');
+const rpsls_rules_text = `Rules for Rock Paper Scissors Lizard Spock:
 
-    if (gameType && opponentType) {
-        playButton.disabled = false;
-        if(opponentType == "with") {
-            document.querySelector('.move-choice').style.display = 'block';
+  - Scissors CUTS Paper
+  - Paper COVERS Rock
+  - Rock SMOOSHES Lizard
+  - Lizard POISONS Spock
+  - Spock SMASHES Scissors
+  - Scissors DECAPITATES Lizard
+  - Lizard EATS Paper
+  - Paper DISPROVES Spock
+  - Spock VAPORIZES Rock
+  - Rock CRUSHES Scissors`
+
+function helpRPS() {
+    alert(rps_rules_text);
+}
+
+function helpRPSLS() {
+    alert(rpsls_rules_text);
+}
+
+function rpsOpponent(shot) {
+    const url = "/app/rps/play/" + shot
+    return response = fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+        .catch(error => console.error(error));
+}
+
+function rpslsOpponent(shot) {
+    const url = "/app/rpsls/play/" + shot
+    return response = fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+        .catch(error => console.error(error));
+}
+
+function rpsNoOpponent() {
+    const url = "/app/rps"
+    return response = fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+        .catch(error => console.error(error));
+}
+
+function rpslsNoOpponent() {
+    const url = "/app/rpsls"
+    return response = fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+        .catch(error => console.error(error));
+}
+
+function getShot() {
+    var gameSelection = document.getElementsByName("noOpponentGame");
+    var game = null;
+    
+    for (var i = 0; i < gameSelection.length; i++) {
+    if (gameSelection[i].checked) {
+        game = gameSelection[i].value;
+        break;
         }
+    }
+    const isRPS = game=="RPS" ? true : false; 
+
+    if (isRPS) {
+        rpsNoOpponent().then(shot => {
+            document.getElementById("draw").value = shot.player;
+        })
     } else {
-        document.querySelector('.move-choice').style.display = 'none';
-        playButton.disabled = true;
+        rpslsNoOpponent().then(shot => {
+            document.getElementById("draw").value = shot.player;
+        })
     }
 }
 
-function updateMoveOptions() {
-    const gameType = document.getElementById('game-type').value;
-    const moveSelect = document.getElementById('player-move');
-    let moveOptions = [];
+function reset() {
+    // Reset all selections and clear fields
+    var gameSelection = document.getElementsByName("game");
+    var drawSelection = document.getElementsByName("selectedShot");
+    var noOpponentGameSelection = document.getElementsByName("noOpponentGame");
 
-    if (gameType === 'rps') {
-        moveOptions = ['rock', 'paper', 'scissors'];
-    } else if (gameType === 'rpsls') {
-        moveOptions = ['rock', 'paper', 'scissors', 'lizard', 'spock'];
+    for(var i=0; i<gameSelection.length; i++) {
+        gameSelection[i].checked = false;
     }
 
-    moveSelect.innerHTML = '';
-    for (const move of moveOptions) {
-        const option = document.createElement('option');
-        option.value = move;
-        option.textContent = move.charAt(0).toUpperCase() + move.slice(1);
-        moveSelect.appendChild(option);
+    for (var i=0; i<drawSelection.length; i++) {
+        drawSelection[i].checked = false;
     }
 
-    // Call showMoveSelection() to update the Play button state
-    showMoveSelection();
-}
-
-async function sendPlayCallWith(gameType, playerChoice) {
-    try {
-      const response = await fetch(`/app/play/${gameType}/${playerChoice}`);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error:', error);
+    for (var i=0; i<noOpponentGameSelection.length; i++) {
+        noOpponentGameSelection[i].checked = false;
     }
+
+    document.getElementById("draw").value = null;
+    document.getElementById("gameResult").value = null;
+    document.getElementById("playerShot").value = null;
+    document.getElementById("computerShot").value = null;
+    location.reload();
 }
 
-async function sendPlayCallWithout(gameType) {
-  try {
-    const response = await fetch(`/app/play/${gameType}`);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-  
-async function playGame() {
-    console.log("game played")
-    const opponent = document.getElementById('opponent-type').value;
-    const game = document.getElementById('game-type').value;
-    let gameResult;
-    if(opponent == "with") {
-        const playerChoice = document.getElementById('player-move').value;
-        gameResult = await sendPlayCallWith(game, playerChoice);
+function play() {
+    var gameSelection = document.getElementsByName("game");
+    var drawSelection = document.getElementsByName("selectedShot");
+
+    var game = null;
+    var shot = null;
+    
+    for (var i = 0; i < gameSelection.length; i++) {
+    if (gameSelection[i].checked) {
+        game = gameSelection[i].value;
+        break;
+        }
+    }
+    const isRPS = game=="RPS" ? true : false; 
+
+    for (var i = 0; i < drawSelection.length; i++) {
+        if (drawSelection[i].checked) {
+            shot = drawSelection[i].value;
+            break;
+        }
+    }
+
+    var result = null;
+    var playerShot = null;
+    var computerShot = null;
+    if (isRPS) {
+        rpsOpponent(shot).then(someVal => {
+            result = someVal.result;
+            playerShot = someVal.player;
+            computerShot = someVal.opponent;
+            document.getElementById("gameResult").value = result;
+            document.getElementById("playerShot").value = playerShot;
+            document.getElementById("computerShot").value = computerShot;
+            setResultBackground(result);
+        });
     } else {
-        gameResult = await sendPlayCallWithout(game);
+        rpslsOpponent(shot).then(someVal => {
+            result = someVal.result;
+            playerShot = someVal.player;
+            computerShot = someVal.opponent;
+            document.getElementById("gameResult").value = result;
+            document.getElementById("playerShot").value = playerShot;
+            document.getElementById("computerShot").value = computerShot;
+            setResultBackground(result);
+        });
     }
+}
 
-    // Save gameResult and opponentType to localStorage
-    localStorage.setItem('gameResult', JSON.stringify(gameResult));
-  }
+function setResultBackground(result) {
+    if (result == "win") {
+        document.getElementById("gameResult").style.backgroundColor = "rgba(153, 255, 153, 0.5)";
+    } else if (result == "lose") {
+        document.getElementById("gameResult").style.backgroundColor = "rgba(255, 51, 0, 0.5)";
+    } else if (result == "tie") {
+        document.getElementById("gameResult").style.backgroundColor = "rgba(139, 207, 196, 0.5)";
+    }
+}
+
+function setLS() {
+    // Enable/Disable lizard and spock radios 
+    var gameSelection = document.getElementsByName("game");
+    var game = null;
+    
+    for (var i = 0; i < gameSelection.length; i++) {
+    if (gameSelection[i].checked) {
+        game = gameSelection[i].value;
+        break;
+        }
+    }
+    const isRPS = game=="RPS" ? true : false; 
+
+    const lizardOption = document.getElementById("lizardOption");
+    const spockOption = document.getElementById("spockOption");
+    const rockOption = document.getElementById("rockOption");
+    lizardOption.disabled = isRPS;
+    spockOption.disabled = isRPS;
+    if (lizardOption.disabled) {
+        lizardOption.checked = false;
+        spockOption.checked = false;
+        rockOption.checked = true;
+    }
+}

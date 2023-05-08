@@ -2,7 +2,6 @@
 // Create require function 
 // https://nodejs.org/docs/latest-v18.x/api/module.html#modulecreaterequirefilename
 import { createRequire } from 'node:module';
-import { rps, rpsls } from './lib/rpsls.js';
 const require = createRequire(import.meta.url);
 // The above two lines allow us to use ES methods and CJS methods for loading
 // dependencies.
@@ -58,6 +57,41 @@ if (args.debug) {
 }
 // Create an app server
 const app = express()
+
+// Check endpoint at /app/ that returns 200 OK
+app.get('/app/', (req, res) => {
+    res.status(200).send('200 OK');
+  });
+
+import { rps, rpsls } from './public/rpsls.js';
+
+app.get('/app/play/:gameType/:playerChoice/', (req, res) => {
+    const { gameType, playerChoice } = req.params;
+    let gameResult;
+
+    if (gameType === 'rps') {
+        gameResult = rps(playerChoice);
+    } else if (gameType === 'rpsls') {
+        gameResult = rpsls(playerChoice);
+    }
+
+    res.json(gameResult);
+});
+
+app.get('/app/play/:gameType/', (req, res) => {
+    const { gameType,} = req.params;
+    let gameResult;
+
+    if (gameType === 'rps') {
+        gameResult = rps();
+    } else if (gameType === 'rpsls') {
+        gameResult = rpsls();
+    }
+
+    res.json(gameResult);
+});
+
+
 // Set a port for the server to listen on
 const port = args.port || args.p || process.env.PORT || 8080
 // Load app middleware here to serve routes, accept data requests, etc.
@@ -72,73 +106,6 @@ const staticpath = args.stat || args.s || process.env.STATICPATH || path.join(__
 app.use('/', express.static(staticpath))
 // Create app listener
 const server = app.listen(port)
-
-// Root endpoint
-app.get("/app", (req,res) => {
-	res.status(200).send("200 OK");
-});
-
-// Single player rps endpoint
-app.get("/app/rps", (req,res) => {
-	res.json(rps());
-});
-
-// Single player rpsls endpoint
-app.get("/app/rpsls", (req,res) => {
-	res.json(rpsls());
-});
-
-// Multiplayer url encoded request body rps endpoint
-app.get("/app/rps/play", (req,res) => {
-	let shot = req.body.shot;	
-	if (!shot) {
-		shot = req.query.shot;
-	}
-	res.json(rps(shot));
-});
-
-// Multiplayer json request body rps endpoint
-app.post("/app/rps/play", (req,res) => {
-	let shot = req.body.shot;	
-	if (!shot) {
-		shot = req.query.shot;
-	}
-	res.json(rps(shot));
-});
-
-// Multiplayer url encoded request body rpsls endpoint
-app.get("/app/rpsls/play", (req,res) => {
-	let shot = req.body.shot;	
-	if (!shot) {
-		shot = req.query.shot;
-	}
-	res.json(rpsls(shot));
-});
-
-// Multiplayer json request body rpsls endpoint
-app.post("/app/rpsls/play", (req,res) => {
-	let shot = req.body.shot;
-	if (!shot) {
-		shot = req.query.shot;
-	}
-	res.json(rpsls(shot));
-});
-
-// Multiplayer parameter rps endpoint
-app.get("/app/rps/play/:shot", (req,res) => {
-	res.json(rps(req.params.shot));
-});
-
-// Multiplayer parameter rpsls endpoint
-app.get("/app/rpsls/play/:shot", (req,res) => {
-	res.json(rpsls(req.params.shot));
-});
-
-// Defualt route
-app.use(function(req, res){
-	res.status(404).send("404 NOT FOUND");
-});
-
 // Create a log entry on start
 let startlog = new Date().toISOString() + ' HTTP server started on port ' + port + '\n'
 // Debug echo start log entry to STDOUT

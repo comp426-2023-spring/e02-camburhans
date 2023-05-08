@@ -71,6 +71,12 @@ main {
   width: 200px;
   height: 50px;
   align-items: center;
+  color: white;
+  text-transform: uppercase;
+}
+
+.game-result {
+  text-transform: uppercase;
 }
 
 /* Style the buttons */

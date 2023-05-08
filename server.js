@@ -20,8 +20,10 @@ if (args.debug) {
 if (args.h || args.help) {
     console.log(`
 usage: node server.js --port=5000
+
 This package serves the static HTML, CSS, and JS files in a /public directory.
 It also creates logs in a common log format (CLF) so that you can better.
+
   --stat,  -s    Specify the directory for static files to be served
                     Default: ./public/
   --port, -p    Specify the port for the HTTP server to listen on
@@ -57,41 +59,6 @@ if (args.debug) {
 }
 // Create an app server
 const app = express()
-
-// Check endpoint at /app/ that returns 200 OK
-app.get('/app/', (req, res) => {
-    res.status(200).send('200 OK');
-  });
-
-import { rps, rpsls } from './public/rpsls.js';
-
-app.get('/app/play/:gameType/:playerChoice/', (req, res) => {
-    const { gameType, playerChoice } = req.params;
-    let gameResult;
-
-    if (gameType === 'rps') {
-        gameResult = rps(playerChoice);
-    } else if (gameType === 'rpsls') {
-        gameResult = rpsls(playerChoice);
-    }
-
-    res.json(gameResult);
-});
-
-app.get('/app/play/:gameType/', (req, res) => {
-    const { gameType,} = req.params;
-    let gameResult;
-
-    if (gameType === 'rps') {
-        gameResult = rps();
-    } else if (gameType === 'rpsls') {
-        gameResult = rpsls();
-    }
-
-    res.json(gameResult);
-});
-
-
 // Set a port for the server to listen on
 const port = args.port || args.p || process.env.PORT || 8080
 // Load app middleware here to serve routes, accept data requests, etc.
@@ -135,3 +102,108 @@ process.on('SIGINT', () => {
         }    
     })
 })
+
+import { rps, rpsls } from "./lib/rpsls.js";
+
+// endpoint at /app/ returns 200 OK
+app.get("/app/", (req,res) => {
+    res.status(200).send({"message":"200 OK"});
+});
+
+// endpoint at /app/rps/ returns {"player":"(rock|paper|scissors)"}
+app.get("/app/rps/", (req,res) => {
+    var result = JSON.stringify(rps())
+    res.status(200)
+    .setHeader('Content-type', 'application/json')
+    .send(result)
+});
+
+// '/app/rpsls/' accepts the correct request bodies
+app.get("/app/rpsls/", (req,res) => {
+    var result = JSON.stringify(rpsls())
+    res.status(200)
+    .setHeader('Content-type', 'application/json')
+    .send(result)
+});
+
+// playing rps endpoint
+app.get("/app/rps/play/", (req,res) => {
+    try {
+        const choice = req.query.choice;
+        const result = JSON.stringify(rps(choice));
+        res.status(200)
+        .setHeader('Content-Type', 'application/json')
+        .send(result);
+    } catch{
+        res.status(400).send(`${choice} is out of range.`);
+    }
+});
+
+// playing rpsls endpoint
+app.get("/app/rpsls/play/", (req,res) => {
+    try {
+        const choice = req.query.choice;
+        const result = JSON.stringify(rpsls(choice));
+        res.status(200)
+        .setHeader('Content-Type', 'application/json')
+        .send(result);
+    } catch{
+        res.status(400).send(`${choice} is out of range.`);
+    }
+});
+
+// rps play post
+app.post("/app/rps/play/", (req,res) => {
+    try {
+        const choice = req.body.choice;
+        const result = JSON.stringify(rps(choice));
+        res.status(200)
+        .setHeader('Content-Type', 'text/plain')
+        .send(result);
+    } catch{
+        res.status(400).send(`${choice} is out of range.`);
+    }
+});
+
+// rpsls play post
+app.post("/app/rpsls/play/", (req,res) => {
+    try {
+        const choice = req.body.choice;
+        const result = JSON.stringify(rpsls(choice));
+        res.status(200)
+        .setHeader('Content-Type', 'application/json')
+        .send(result);
+    } catch{
+        res.status(400).send(`${choice} is out of range.`);
+    }
+});
+
+app.get("/app/rps/play/:choice", (req,res) => {
+    try {
+        const choice = req.params.choice;
+        const result = JSON.stringify(rps(choice));
+        res.status(200)
+        .setHeader('Content-Type', 'application/json')
+        .send(result);
+    } catch{
+        res.status(400).send(`${choice} is out of range.`);
+    }
+});
+
+app.get("/app/rpsls/play/:choice", (req,res) => {
+    try {
+        const choice = req.params.choice;
+        const result = JSON.stringify(rpsls(choice));
+        res.status(200)
+        .setHeader('Content-Type', 'application/json')
+        .send(result);
+    } catch{
+        res.status(400).send(`${choice} is out of range.`);
+    }
+});
+
+// catch 404 error
+app.get("app/*", (req,res) => {
+    res.status(404)
+    .send('404: Not Found!');
+});

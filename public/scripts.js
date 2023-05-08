@@ -83,11 +83,11 @@ function getShot() {
 
     if (isRPS) {
         rpsNoOpponent().then(shot => {
-            document.getElementById("draw").value = shot.player;
+            document.getElementById("draw").innerHTML = shot.player + "<img src='/img/" +shot.player+ ".jpg' style='width: 20%; height: auto; margin-left:10px;'>";
         })
     } else {
         rpslsNoOpponent().then(shot => {
-            document.getElementById("draw").value = shot.player;
+            document.getElementById("draw").innerHTML = shot.player + "<img src='/img/" +shot.player+ ".jpg' style='width: 20%; height: auto; margin-left:10px;'>";
         })
     }
 }
@@ -147,9 +147,9 @@ function play() {
             result = someVal.result;
             playerShot = someVal.player;
             computerShot = someVal.opponent;
-            document.getElementById("gameResult").value = result;
-            document.getElementById("playerShot").value = playerShot;
-            document.getElementById("computerShot").value = computerShot;
+            document.getElementById("gameResult").innerHTML = result;
+            document.getElementById("playerShot").innerHTML = playerShot + "<img src='/img/" +playerShot+ ".jpg' style='width: 20%; height: auto; margin-left:10px;'>";
+            document.getElementById("computerShot").innerHTML = computerShot + "<img src='/img/" +computerShot+ ".jpg' style='width: 20%; height: auto; margin-left:10px;'>";
             setResultBackground(result);
         });
     } else {
@@ -157,9 +157,9 @@ function play() {
             result = someVal.result;
             playerShot = someVal.player;
             computerShot = someVal.opponent;
-            document.getElementById("gameResult").value = result;
-            document.getElementById("playerShot").value = playerShot;
-            document.getElementById("computerShot").value = computerShot;
+            document.getElementById("gameResult").innerHTML = result;
+            document.getElementById("playerShot").innerHTML = playerShot + "<img src='/img/" +playerShot+ ".jpg' style='width: 20%; height: auto; margin-left:10px;'>";
+            document.getElementById("computerShot").innerHTML = computerShot + "<img src='/img/" +computerShot+ ".jpg' style='width: 20%; height: auto; margin-left:10px;'>";
             setResultBackground(result);
         });
     }
@@ -167,11 +167,11 @@ function play() {
 
 function setResultBackground(result) {
     if (result == "win") {
-        document.getElementById("gameResult").style.backgroundColor = "rgba(153, 255, 153, 0.5)";
+        document.getElementById("gameResult").style = "color: green; text-transform: uppercase; font-weight: bold; font-size: 200%;";
     } else if (result == "lose") {
-        document.getElementById("gameResult").style.backgroundColor = "rgba(255, 51, 0, 0.5)";
+        document.getElementById("gameResult").style = "color: red; text-transform: uppercase; font-weight: bold; font-size: 200%;";
     } else if (result == "tie") {
-        document.getElementById("gameResult").style.backgroundColor = "rgba(139, 207, 196, 0.5)";
+        document.getElementById("gameResult").style = "color: silver; text-transform: uppercase; font-weight: bold; font-size: 200%;";
     }
 }
 

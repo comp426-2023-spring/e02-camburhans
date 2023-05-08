@@ -1,49 +1,126 @@
-#body {
-  text-align: center;
-  background-color: rgba(214, 212, 152, 0.1);
+/* Style the body */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #333;
+  margin: 0;
+  padding: 0;
+  font-size: 200%;
 }
 
-#draw {
-  font-size: 24px;
-  background-color: rgba(139, 207, 196, 0.3);
-  text-align: center;
+/* Style the header */
+header {
+  background-color: #4B9CD3;
+  color: #fff;
+  padding: 20px;
+  font-size: 60% !important;
 }
 
-#gameResult {
-  font-size: 24px;
-  background-color: rgba(139, 207, 196, 0.3);
-  text-align: center;
+header button {
+  font-size: 100%;
 }
 
-#playerShot {
-  font-size: 24px;
-  background-color: rgba(139, 207, 196, 0.3);
-  text-align: center;
+/* Style the main section */
+main {
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-#computerShot {
-  font-size: 24px;
-  background-color: rgba(139, 207, 196, 0.3);
-  text-align: center;
+.content {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;  
+  grid-template-rows: 1fr;
+  height: 100%;
+  width: 80%;
+  padding: 20px;
+  justify-items: center;
+  margin-top: 10%;
 }
 
-#gameTitle {
-  background-color: rgba(73, 53, 217, 0.6);
+.random, .computer, .results {
+  margin-left: 25px;
+  margin-right: 25px;
 }
 
+.random {
+  grid-column: 1/2;
+  /* background-color: blue; */
+}
+
+.computer {
+  grid-column: 2/3;
+  /* background-color: red; */
+
+}
+
+.results {
+  grid-column: 3/4;
+  /* background-color: green; */
+}
+
+.results h4 {
+  color: #4B9CD3;
+}
+
+.random-result,
+.player-shot,
+.computer-shot {
+  display: flex;
+  width: 200px;
+  height: 50px;
+  align-items: center;
+}
+
+/* Style the buttons */
 .button {
+  background-color: #4B9CD3;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
   cursor: pointer;
-  outline: 0;
-  display: inline-block;
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: center;
-  background-color: transparent;
-  border: 1px solid transparent;
-  padding: 6px 12px;
-  font-size: 1rem;
-  border-radius: .25rem;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-  color: #0d6efd;
-  border-color: #0f3163;
+}
+
+.button:hover {
+  background-color: #2E6D99;
+}
+
+/* Style the radio buttons */
+input[type="radio"] {
+  margin-right: 5px;
+  background-color: #fff;
+}
+
+input[type="radio"] + .text {
+  color: #fff;
+}
+
+
+/* Style the input fields */
+input[type="text"] {
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 200px;
+  height: 50px;
+  border: 1px solid #4B9CD3;
+  background-color: #333;
+  font-size: 16px;
+}
+
+label {
+  color: #fff
+}
+
+/* Style the headings */
+h1, h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+h2 {
+  color: #4B9CD3;
+  margin-top: 0;
 }

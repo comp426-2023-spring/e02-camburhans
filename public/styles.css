@@ -1,83 +1,14 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-}
-
-h1 {
+    background-color: #9dbeb7;
     text-align: center;
-    color: #333;
-}
-
-.game-container, .results-container, .rules-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-}
-
-.game-choice,
-.opponent-choice,
-.move-choice {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-}
-
-label {
-    margin-bottom: 5px;
-}
-
-select {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.play-button,
-.reset-button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
+  }
+  
+  h1 {
+    color: #e73213;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 10px 2px;
-    cursor: pointer;
-    padding: 10px 20px;
-    border-radius: 5px;
-}
+  }
 
-.play-button:disabled,
-.reset-button:disabled {
-    background-color: #a3a3a3;
-    cursor: not-allowed;
-}
-
-
-.reset-button:hover {
-    background-color: #45a049;
-}
-
-.results-container, .game-container, .rules-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  h2 {
+    color: #efe6d5;
     text-align: center;
-}
-
-.rules-link {
-    display: block;
-    margin-top: 15px;
-    color: #007BFF;
-    text-decoration: none;
-}
-.rules-link:hover {
-    text-decoration: underline;
-}
+  }

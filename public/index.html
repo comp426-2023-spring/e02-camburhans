@@ -1,40 +1,116 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPS and RPSLS Game</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="scripts.js" type="module"></script>
-</head>
-<body>
-    <div class="game-container">
-        <h1>RPS and RPSLS Game</h1>
-            <div class="game-choice">
-                <label for="game-type">Choose a game:</label>
-                <select id="game-type">
-                    <option value="">Select a game...</option>
-                    <option value="rps">Rock, Paper, Scissors</option>
-                    <option value="rpsls">Rock, Paper, Scissors, Lizard, Spock</option>
-                </select>
-            </div>
-            <div class="opponent-choice">
-                <label for="opponent-type">Choose how to play:</label>
-                <select id="opponent-type">
-                    <option value="">Select how to play...</option>
-                    <option value="without">Play without an opponent (Random Draw)</option>
-                    <option value="with">Play with an opponent</option>
-                </select>
-            </div>
-            <div class="move-choice" style="display: none;">
-                <label for="player-move">Choose your move:</label>
-                <select id="player-move">
-                    <!-- Move options will be populated by JavaScript -->
-                </select>
-            </div>
-            <button id="play-button" class="play-button" onclick="window.location.href='results.html'" type="button" disabled>Play</button>
-            <a href="rules.html" class="rules-link">View game rules</a>
+    <head>
+        <meta charset="utf-8">
+        <title>RPS and RPSLS</title>
+        <link href="./styles.css" rel="stylesheet">
+        <script src="./scripts.js"></script>
+    </head>
+    <body>
+            <h1>Play a Game!</h1>
+            <!-- A "coin" button that creates an event for the flipCoin() function in main.js. -->
+            <div id="gameSelectorButton">
+                <h2>Choose Game:</h2>
+                <p>
+                  <input type="radio" name="gameSelector" value="rpsChosen" checked onclick="showButton('rpsOpponentButton');hideButton('rpslsOpponentButton');hideButton('rpsChoicesButton');hideButton('rpslsChoicesButton');hideButton('playButton');changeLabel('resultText', '');hideButton('resultHeader')">Rock, Paper, Scissors
+                </p>
+                <p>
+                  <input type="radio" name="gameSelector" value="rpslsChosen" onclick="showButton('rpslsOpponentButton');hideButton('rpsOpponentButton');hideButton('rpsChoicesButton');hideButton('rpslsChoicesButton');hideButton('playButton');changeLabel('resultText', '');hideButton('resultHeader')">Rock, Paper, Scissors, Lizard, Spock
+                </p>
+        </div>
+         <!-- RPS Opponent Button  -->
+        <div id="rpsOpponentButton" style="display: none">
+            <h2>Play against an opponent?</h2>
+            <p>
+              <input type="radio" name="rpsOpponentChoice" value="yes" checked onclick="showButton('rpsChoicesButton');showButton('playButton');changeLabel('resultText', '');showButton('resultHeader')">Yes
+            </p>
+            <p>
+              <input type="radio" name="rpsOpponentChoice" value="no" onclick="hideButton('rpsChoicesButton');showButton('playButton');changeLabel('resultText', '');showButton('resultHeader')">No
+            </p>
         </div>
 
-</body>
+         <!-- RPSLS Opponent Button  -->
+        <div id="rpslsOpponentButton" style="display: none">
+            <h2>Play against an opponent?</h2>
+            <p>
+              <input type="radio" name="rpslsOpponentChoice" value="yes" checked onclick="showButton('rpslsChoicesButton');showButton('playButton');changeLabel('resultText', '');showButton('resultHeader')">Yes
+            </p>
+            <p>
+              <input type="radio" name="rpslsOpponentChoice" value="no" onclick="hideButton('rpslsChoicesButton');showButton('playButton');changeLabel('resultText', '');showButton('resultHeader')">No
+            </p>
+        </div>
+
+         <!-- RPS Choices Button  -->
+        <div id="rpsChoicesButton"  style="display: none;">
+            <h2>Choose your move:</h2>
+            <p>
+              <input type="radio" checked name="rpsChoice" value="rock">Rock
+            </p>
+            <p>
+              <input type="radio" name="rpsChoice" value="paper">Paper
+            </p>
+            <p>
+              <input type="radio" name="rpsChoice" value="scissors">Scissors
+            </p>
+          </div>
+
+         <!-- RPSLS Choices Button  -->
+        <div id="rpslsChoicesButton"  style="display: none;">
+            <h2>Choose your move:</h2>
+            <p>
+              <input type="radio" checked name="rpslsChoice" value="rock">Rock
+            </p>
+            <p>
+              <input type="radio" name="rpslsChoice" value="paper">Paper
+            </p>
+            <p>
+              <input type="radio" name="rpslsChoice" value="scissors">Scissors
+            </p>
+            <p>
+              <input type="radio" name="rpslsChoice" value="lizard">Lizard
+            </p>
+            <p>
+              <input type="radio" name="rpslsChoice" value="spock">Spock
+            </p>
+          </div>
+
+
+          <!-- Random Draw RPS Button-->
+          <div id="playButton" style="display: none;">
+            <button type="button" onclick="playGameButton()">Play Game</button>
+            <button type="button" onclick="resetPage()">Reset Page</button>
+          </div>
+
+          <div id="resultDiv">
+            <h2 id="resultHeader" style="display: none;">Result: </h2>
+            <label id="resultText">
+                <br>
+            </label>
+            <br>
+          </div>
+
+          <div id="showRulesID" >
+            <br>
+            <button type="button" onclick="showButton('rulesID')">Show Rules</button>
+            <button type="button" onclick="hideButton('rulesID')">Hide Rules</button>
+            <label id="rulesID" style="display: none;">
+                <br>
+                Rules for Rock Paper Scissors:<br>
+                - Scissors CUTS Paper<br>
+                - Paper COVERS Rock<br>
+                - Rock CRUSHES Scissors<br>
+                <br>
+                Rules for the Lizard-Spock Expansion of Rock Paper Scissors:<br>
+                - Scissors CUTS Paper<br>
+                - Paper COVERS Rock<br>
+                - Rock SMOOSHES Lizard<br>
+                - Lizard POISONS Spock<br>
+                - Spock SMASHES Scissors<br>
+                - Scissors DECAPITATES Lizard<br>
+                - Lizard EATS Paper<br>
+                - Paper DISPROVES Spock<br>
+                - Spock VAPORIZES Rock<br>
+                - Rock CRUSHES Scissors
+            </label>
+          </div>
+    </body>
 </html>
